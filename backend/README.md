@@ -1,2 +1,6 @@
-后台服务器接口
+# 编译
 
+mvn clean package
+
+运行
+java -jar target/xxx.jar
