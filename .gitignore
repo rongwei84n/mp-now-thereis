@@ -5,6 +5,7 @@
 .settings/
 /logs/
 .idea
+backend/target/
 
 # dependencies
 /mp-front/node_modules
