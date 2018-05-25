@@ -1,24 +1,71 @@
 <template>
-  <div class="container">
-    我是首页
-    <button @click="showToast">
-      点击提示
-    </button>
-    <mptoast />
+  <div class="container" @click="clickHandle('test click', $event)">
+
+    <div class="userinfo" @click="bindViewTap">
+      <img class="userinfo-avatar" v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" background-size="cover" />
+      <div class="userinfo-nickname">
+        <card :text="userInfo.nickName"></card>
+      </div>
+    </div>
+
+    <div class="usermotto">
+      <div class="user-motto">
+        <card :text="motto"></card>
+      </div>
+    </div>
+
+    <form class="form-container">
+      <input type="text" class="form-control" v-model="motto" placeholder="v-model" />
+      <input type="text" class="form-control" v-model.lazy="motto" placeholder="v-model.lazy" />
+    </form>
+    <Button>小程序组件</Button>
+    <a href="/pages/counter/main" class="counter">去往Vuex示例页面</a>
   </div>
 </template>
 
 <script>
-import mptoast from "mptoast";
+import card from "@/components/card";
+
 export default {
-  components: {
-    mptoast
+  data() {
+    return {
+      motto: "Hello World",
+      userInfo: {}
+    };
   },
+  onShow() {
+    // `this` 指向 vm 实例
+    console.log("a is: " + this.a, "小程序触发的 onshow");
+  },
+  components: {
+    card
+  },
+
   methods: {
-    showToast() {
-      console.log(111);
-      this.$mptoast("我是提示信息");
+    bindViewTap() {
+      const url = "../logs/main";
+      wx.navigateTo({ url });
+    },
+    getUserInfo() {
+      // 调用登录接口
+      wx.login({
+        success: () => {
+          wx.getUserInfo({
+            success: res => {
+              this.userInfo = res.userInfo;
+            }
+          });
+        }
+      });
+    },
+    clickHandle(msg, ev) {
+      console.log("clickHandle:", msg, ev);
     }
+  },
+
+  created() {
+    // 调用应用实例的方法获取全局数据
+    this.getUserInfo();
   }
 };
 </script>
